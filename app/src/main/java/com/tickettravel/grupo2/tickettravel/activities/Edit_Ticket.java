@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Edit_Ticket extends AppCompatActivity {
+
+    //region Properties
     private Uri path;
     private  String realPath;
     private TextView amount,geolocation, dateticket, observation;
@@ -48,50 +50,51 @@ public class Edit_Ticket extends AppCompatActivity {
     private LottieAnimationView animationLottieMain;
     Bundle bundle=null;
     Ticket parameters;
+    //endregion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__ticket);
         showToolbar("Edit Ticket",true);
+        findViewsById();
+        setOnItemSelectedListener();
+        setOnClickListener();
 
-        // References
-        scroll= findViewById(R.id.scroollprincipal);
-        amount= findViewById(R.id.amountticket);
-        geolocation = findViewById(R.id.georeferenciaticket);
-        observation= findViewById(R.id.observation);
-        spinnerTypeCurrency = findViewById(R.id.spinnerTypeCurrency);
-        spinnerTypeTicket = findViewById(R.id.spinnerTypeTycket);
-        dateticket =findViewById(R.id.dateticket);
-        imageButton=findViewById(R.id.imagebutton);
-        frameLayout= findViewById(R.id.frameloading);
-        animationLottieMain=findViewById(R.id.animationlottiemain);
-        imagenError =findViewById(R.id.imagenerror);
+        new LoadTaskTypeTicket().execute();
+        SetValues();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if(resultCode == RESULT_OK)
+        {
+            path = data.getData();
+            imageButton.setImageURI(path);
+            realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+        }
+    }
+
+    private void setOnClickListener() {
         dateticket.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); // current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-                // date picker dialog
-                datePickerDialog = new DatePickerDialog(getApplicationContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // set day of month , month and year value in the edit text
-                                dateticket.setText(dayOfMonth + "/"
-                                        + (monthOfYear + 1) + "/" + year);
-
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
+            public void onClick(View v) {showDatePickerDialog();}
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, PHOTO_SELECTED);
+            }
+        });
+    }
 
+    private void setOnItemSelectedListener() {
         spinnerTypeCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -118,18 +121,39 @@ public class Edit_Ticket extends AppCompatActivity {
 
             }
         });
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, PHOTO_SELECTED);
-            }
-        });
-        new LoadTaskTypeTicket().execute();
-        SetValues();
     }
+
+    private void showDatePickerDialog() {
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR); // current year
+        int mMonth = c.get(Calendar.MONTH); // current month
+        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+        // date picker dialog
+        datePickerDialog = new DatePickerDialog(getApplicationContext(),new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year,int monthOfYear, int dayOfMonth) {
+                // set day of month , month and year value in the edit text
+                dateticket.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+            }
+        }, mYear, mMonth, mDay);
+
+        datePickerDialog.show();
+    }
+
+    private void findViewsById() {
+        scroll= findViewById(R.id.scroollprincipal);
+        amount= findViewById(R.id.amountticket);
+        geolocation = findViewById(R.id.georeferenciaticket);
+        observation= findViewById(R.id.observation);
+        spinnerTypeCurrency = findViewById(R.id.spinnerTypeCurrency);
+        spinnerTypeTicket = findViewById(R.id.spinnerTypeTycket);
+        dateticket =findViewById(R.id.dateticket);
+        imageButton=findViewById(R.id.imagebutton);
+        frameLayout= findViewById(R.id.frameloading);
+        animationLottieMain=findViewById(R.id.animationlottiemain);
+        imagenError =findViewById(R.id.imagenerror);
+    }
+
     public void showToolbar(String title, boolean upButton)
     {
         Toolbar toolbar=findViewById(R.id.toolbar);
@@ -137,7 +161,7 @@ public class Edit_Ticket extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
-toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -198,19 +222,6 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             else {
                 imagenError.setVisibility(View.VISIBLE);
                 animationLottieMain.setVisibility(View.GONE);}
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if(resultCode == RESULT_OK)
-        {
-            path = data.getData();
-            imageButton.setImageURI(path);
-            realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
         }
     }
 
