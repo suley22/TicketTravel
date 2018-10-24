@@ -26,16 +26,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        userText = findViewById(R.id.login_userText);
-        passText = findViewById(R.id.login_passText);
-        buttonText=findViewById(R.id.login_buttonLogin);
-        lottieAnimationView = findViewById(R.id.animationlottielogin);
+        findViewsById();
         buttonText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validate();
             }
         });
+    }
+
+    private void findViewsById(){
+        userText = findViewById(R.id.login_userText);
+        passText = findViewById(R.id.login_passText);
+        buttonText=findViewById(R.id.login_buttonLogin);
+        lottieAnimationView = findViewById(R.id.animationlottielogin);
     }
 
     private void login(String name) {
