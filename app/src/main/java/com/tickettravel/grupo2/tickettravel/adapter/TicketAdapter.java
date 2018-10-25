@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.auxiliar.FlipAnimator;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
@@ -31,7 +32,6 @@ public class TicketAdapter extends ArrayRvAdapter<Ticket,TicketAdapter.TicketVie
     private static int currentSelectedIndex = -1;
     //endregion
 
-    //    //    //TODO mover clases holder a carpeta separada si se puede
     public static class TicketViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         //region properties
@@ -95,10 +95,10 @@ public class TicketAdapter extends ArrayRvAdapter<Ticket,TicketAdapter.TicketVie
     private void setImageProfile(TicketViewHolder holder,Ticket t) {
         String descTicketType = t.getTicketTypeDescription();
         switch (descTicketType){
-            case "Taxi"://TODO hacer enumerable o constantes
+            case Constants.TYPE_TICKET_TAXI:
                 holder.imgProfile.setImageResource(R.drawable.taxi);
                 break;
-            case "Cafeteria":
+            case Constants.TYPE_TICKET_CAFETERIA:
                 holder.imgProfile.setImageResource(R.drawable.cooffe);
                 break;
             default:

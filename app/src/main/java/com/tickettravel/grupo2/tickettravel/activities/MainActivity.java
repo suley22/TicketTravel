@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Bundle parametros;
     private Toolbar toolbar;
     private FloatingActionButton floatingBtn;
+
+    private final String KEY_GET_EXTRA_STRING = "name";
+    private final String KEY_USER_SESION = "userSesion";
     //endregion
 
     @Override
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         parametros = this.getIntent().getExtras();
-        NameUser= parametros.getString("name");//TODO crear constante
+        NameUser = parametros.getString(KEY_GET_EXTRA_STRING);
 
         findViewsById();
         initFragment();
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_render) {
            fragment= new Rendir_fragment();
         } else if (id == R.id.nav_logout) {
-            SharedPreferences preferences =getSharedPreferences("userSesion",0);//TODO crear constante
+            SharedPreferences preferences = getSharedPreferences(KEY_USER_SESION,0);
             preferences.edit().clear().commit();
             this.startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();

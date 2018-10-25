@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
 public class RvAdapter extends ArrayRvAdapter<Ticket,RvAdapter.TicketViewHolder> implements View.OnClickListener
@@ -71,11 +72,11 @@ public class RvAdapter extends ArrayRvAdapter<Ticket,RvAdapter.TicketViewHolder>
     private void setTicketColor(TicketViewHolder holder,Ticket t) {
         String typeTicketDescription = t.getTicketTypeDescription();
         switch (typeTicketDescription){
-            case "Taxi": //TODO ver donde poner constantes
-                holder.linearColor.setBackgroundColor(Color.parseColor("#84DBFF"));//TODO mover a constantes
+            case Constants.TYPE_TICKET_TAXI:
+                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_TAXI));
                 break;
-            case "Cafeteria":
-                holder.linearColor.setBackgroundColor(Color.parseColor("#D01F4D"));
+            case Constants.TYPE_TICKET_CAFETERIA:
+                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_CAFETERIA));
                 break;
             default:
                 break;

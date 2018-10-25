@@ -3,6 +3,7 @@ import android.util.Log;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.data.services.TicketService;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
@@ -49,39 +50,49 @@ public class RestApiTicket
         return tickets;
     }
 
-    public String postTickets(ArrayList<Ticket> tickets)
+    public ArrayList<Ticket> postTickets(ArrayList<Ticket> tickets)
     {
-        String result;
-        if(tickets!=null)
-        {try
+        //TODO despues de usar este metodo borrar los ticket que vienen por parametro desde el activity
+        ArrayList<Ticket> processedTickets = new ArrayList<Ticket>();
+        if(tickets != null)
         {
-            Map resul;
-            for (int i = 0; i <tickets.size() ; i++) {
-                Cloudinary cloudinary = new Cloudinary("cloudinary://761652156746733:n14HmdjezX2mUy-0cJjGWlmoyBs@dtcmp4y9n");
-                String url=tickets.get(i).getImageUrl();
-                String id=tickets.get(i).getId().toString();
-                resul=cloudinary.uploader().upload(url, ObjectUtils.asMap("public_id",id));
-                 tickets.get(i).setImageUrl(resul.get("url").toString());
+            try
+            {
+                Map resul;
+                for (int i = 0; i < tickets.size() ; i++) {
+                    Cloudinary cloudinary = new Cloudinary(Constants.CLOUDINARY_API_URL);
+                    Ticket ticket = tickets.get(i);
+                    resul = cloudinary.uploader().upload(ticket.getImageUrl(), ObjectUtils.asMap("public_id",ticket.getId().toString()));
+                    ticket.setImageUrl(resul.get("url").toString());
+                    processedTickets.add(ticket);
+                }
+
+                Retrofit retrofit = buildRetrofit();
+                TicketService ticketService = retrofit.create(TicketService.class);
+                Call<String> ticketsCall = ticketService.postTickets(tickets);
+                String result = ticketsCall.execute().body();
+
+                if(result.equalsIgnoreCase("fail")){
+                    processedTickets = null;
+                }
             }
-            Retrofit retrofit = buildRetrofit();
-            TicketService ticketService = retrofit.create(TicketService.class);
-            Call<String> ticketsCall = ticketService.postTickets(tickets);
-            result = ticketsCall.execute().body();
+            catch(Exception e)
+            {
+                Log.d("estoy en catch", e.toString());
+                processedTickets = null;
+            }
         }
-        catch(Exception e)
-        {
-            Log.d("estoy en catch", e.toString());
-            result="false";
-        }}
         else
-        {result = null;}
-        return result;
+        {
+            processedTickets = null;
+        }
+        return processedTickets;
     }
 
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").//TODO mover a constante
+                baseUrl(Constants.WEB_API_URL).
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

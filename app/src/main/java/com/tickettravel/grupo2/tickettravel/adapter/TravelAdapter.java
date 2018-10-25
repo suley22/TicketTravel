@@ -1,10 +1,13 @@
 package com.tickettravel.grupo2.tickettravel.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,26 +24,25 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
 {
 
     private Activity activity;
+    private final String keyExtraIdTravel = "id_travel";
 
     public static class TicketViewHolder extends RecyclerView.ViewHolder
     {
-    TextView title, itemorigin,itemdestiny,datestart2,dateend2, status;
-    Button action_add, action_see;
+        private TextView title, itemorigin,itemdestiny,datestart2,dateend2, status;
+        private Button action_add, action_see;
 
-
-    public TicketViewHolder(View itemView)
-    {
-        super(itemView);
-        title= itemView.findViewById(R.id.title);
-        itemorigin = itemView.findViewById(R.id.itemorigin);
-        itemdestiny = itemView.findViewById(R.id.itemdestiny);
-        datestart2 = itemView.findViewById(R.id.datestart2);
-        dateend2 = itemView.findViewById(R.id.dateend2);
-        status = itemView.findViewById(R.id.idstatus);
-        action_add = itemView.findViewById(R.id.action_add);
-        action_see = itemView.findViewById(R.id.action_see);
-    }
-
+        public TicketViewHolder(View itemView)
+        {
+            super(itemView);
+            title= itemView.findViewById(R.id.title);
+            itemorigin = itemView.findViewById(R.id.itemorigin);
+            itemdestiny = itemView.findViewById(R.id.itemdestiny);
+            datestart2 = itemView.findViewById(R.id.datestart2);
+            dateend2 = itemView.findViewById(R.id.dateend2);
+            status = itemView.findViewById(R.id.idstatus);
+            action_add = itemView.findViewById(R.id.action_add);
+            action_see = itemView.findViewById(R.id.action_see);
+        }
     }
 
     public TravelAdapter(Activity activity){
@@ -60,12 +62,11 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
         Travel t = getItems().get(position);
         setTextViewHolder(holder,t);
 
-        //TODO poner switch para status y separar la logica a metodos con nombres descriptivos
         int status = t.getStatus();
         switch (status){
             case 2:
-                holder.status.setText("Closed");
-                holder.status.setTextColor(Color.parseColor("#BF123F"));
+                holder.status.setText(R.string.status_travel_closed);
+                holder.status.setTextColor(ContextCompat.getColor(activity,R.color.status_color_travel_closed));
                 holder.action_add.setVisibility(View.GONE);
                 break;
             default:
@@ -78,7 +79,7 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
             public void onClick(View v) {
                 Intent intent= new Intent(activity,TicketInTravel.class);
                 Bundle parametros= new Bundle();
-                parametros.putInt("id_travel",getItems().get(position).getIdTravel());
+                parametros.putInt(keyExtraIdTravel,getItems().get(position).getIdTravel());
                 intent.putExtras(parametros);
                 activity.startActivity(intent);
             }
@@ -90,8 +91,8 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(activity,List_Tickets.class);
-                Bundle parametros= new Bundle();
-                parametros.putInt("id_travel",getItems().get(position).getIdTravel());//TODO mover a constante
+                Bundle parametros = new Bundle();
+                parametros.putInt(keyExtraIdTravel,getItems().get(position).getIdTravel());
                 intent.putExtras(parametros);
                 activity.startActivity(intent);
             }

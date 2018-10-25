@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
 public class RvAdapterTicketInTravel extends ArrayRvAdapter<Ticket,RvAdapterTicketInTravel.TicketViewHolder>{
@@ -27,7 +28,7 @@ public class RvAdapterTicketInTravel extends ArrayRvAdapter<Ticket,RvAdapterTick
     {
         this.context=context;
     }
-    //TODO mover clases holder a carpeta separada si se puede
+
     public static class TicketViewHolder extends RecyclerView.ViewHolder
     {
         private TextView tvType;
@@ -79,11 +80,11 @@ public class RvAdapterTicketInTravel extends ArrayRvAdapter<Ticket,RvAdapterTick
         String descTypeTicket = t.getTicketTypeDescription();
 
         switch(descTypeTicket){
-            case "Taxi"://TODO mover a constante
-                holder.linearColor.setBackgroundColor(Color.parseColor("#84DBFF"));//TODO mover a constantes res
+            case Constants.TYPE_TICKET_TAXI:
+                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_TAXI));
                 break;
-            case "Cafeteria":
-                holder.linearColor.setBackgroundColor(Color.parseColor("#D01F4D"));//TODO mover a constantes res
+            case Constants.TYPE_TICKET_CAFETERIA:
+                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_CAFETERIA));
                 break;
             default:
                 break;

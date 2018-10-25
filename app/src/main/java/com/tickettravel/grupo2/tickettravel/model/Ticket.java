@@ -1,15 +1,10 @@
 package com.tickettravel.grupo2.tickettravel.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
 import com.orm.dsl.Table;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 @Table
-public class Ticket extends SugarRecord implements Serializable {
+public class Ticket extends SugarRecordModel {
     private static final long serialVersionUID = 5530255968065458983L;
 
     private @SerializedName("Amount")
@@ -130,33 +125,5 @@ public class Ticket extends SugarRecord implements Serializable {
 
     public void setGeolocation(String geolocation) {
         Geolocation = geolocation;
-    }
-
-    private void writeObject(ObjectOutputStream o) throws IOException
-    {
-        o.defaultWriteObject();
-
-        try
-        {
-            o.writeLong(getId());
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private void readObject(ObjectInputStream o) throws IOException, ClassNotFoundException
-    {
-        o.defaultReadObject();
-
-        try
-        {
-            setId(o.readLong());
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 }

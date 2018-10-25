@@ -39,6 +39,9 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
     private int IdTravel;
     private ImageView imagenerror;
     private LoadPost loadPost;
+    private final String KEY_EXTRA_ID_TRAVEL = "id_travel";
+    private final String POST_EXECUTE_OK = "ok";
+    private final String POST_EXECUTE_FAIL = "fail";
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
         loadToolbar();
 
         Bundle data=this.getIntent().getExtras();
-        IdTravel=data.getInt("id_travel"); //TODO crear constante
+        IdTravel = data.getInt(KEY_EXTRA_ID_TRAVEL);
         CloudinarySingleton.getInstance(this);
 
         findViewsById();
@@ -110,12 +113,15 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
         @Override
         protected void onPostExecute(List<Ticket> ticket) {
             if(ticket.size()>0)
-            {mAdapter.addAll(ticket);
+            {
+                mAdapter.addAll(ticket);
                 recyclerView.setVisibility(View.VISIBLE);
-                frameLayout.setVisibility(View.GONE);}
+                frameLayout.setVisibility(View.GONE);
+            }
             else
-            {textnull.setVisibility(View.VISIBLE);
-            textnull.setText("No Tickets Saved");
+            {
+                textnull.setVisibility(View.VISIBLE);
+                textnull.setText(getResources().getString(R.string.Recyclernull));
                 lottieAnimationView.cancelAnimation();
                 lottieAnimationView.setVisibility(View.GONE);
             }
@@ -134,9 +140,19 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
             frameLayout.setVisibility(View.VISIBLE);
             lottieAnimationView.playAnimation();
         }
+
         @Override
         protected String doInBackground(ArrayList<Ticket>... lists) {
-            return RestApiTicket.getInstance().postTickets(lists[0]);
+            ArrayList<Ticket> processedTickets = RestApiTicket.getInstance().postTickets(lists[0]);
+
+            if(processedTickets != null){
+                for (int i = 0; i < lists[0].size();i++){
+                    Ticket ticket = lists[0].get(i);
+                    ticket.delete();
+                }
+            }
+
+            return "";
         }
         @Override
         protected void onPostExecute(String ticket) {
@@ -146,17 +162,22 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
                 imagenerror.setVisibility(View.VISIBLE);
                 textnull.setVisibility(View.GONE);
                 lottieAnimationView.setVisibility(View.GONE);
+                return;
             }
-            else if(ticket.equals("ok")) //TODO crear constante (cambiar por switch si se puede)
-            {
-                recyclerView.setVisibility(View.VISIBLE);
-                frameLayout.setVisibility(View.GONE);
-                lottieAnimationView.cancelAnimation();
+
+            recyclerView.setVisibility(View.VISIBLE);
+            frameLayout.setVisibility(View.GONE);
+            lottieAnimationView.cancelAnimation();
+
+            switch(ticket){
+                case POST_EXECUTE_OK:
+                    break;
+                case POST_EXECUTE_FAIL:
+                    Toast.makeText(getApplicationContext(),"Error de conexion, intente mas tarde por favor", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
             }
-            else {recyclerView.setVisibility(View.VISIBLE);
-                frameLayout.setVisibility(View.GONE);
-                lottieAnimationView.cancelAnimation();
-                Toast.makeText(getApplicationContext(),"Error de conexion, intente mas tarde por favor", Toast.LENGTH_LONG).show(); }
         }
     }
 

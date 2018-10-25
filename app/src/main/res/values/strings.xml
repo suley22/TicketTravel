@@ -12,7 +12,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Recyclernull">No Tickets Saved</string>
     <string name="newticket">New Ticket</string>
@@ -27,4 +26,11 @@
     <string name="viewtravel">View Travel</string>
     <string name="Loading">Uploading Tickets, wait please...</string>
     <string name="title_actionBar_mainActivity">Ticket Travel</string>
+
+    <!--status travel list-->
+    <string name="status_travel_closed">Cerrado</string>
+
+    <!--type ticket-->
+    <string name="type_ticket_taxi">Taxi</string>
+
 </resources>

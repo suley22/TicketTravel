@@ -48,15 +48,17 @@ public class Edit_Ticket extends AppCompatActivity {
     private FrameLayout frameLayout;
     private ImageView imagenError;
     private LottieAnimationView animationLottieMain;
-    Bundle bundle=null;
-    Ticket parameters;
+    private Bundle bundle = null;
+    private Ticket parameters;
+    private final String KEY_GET_EXTRA_TICKET = "Mi Ticket";
+    private final String TITLE_GET_EXTRA_TICKET = "Edit Ticket";
     //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__ticket);
-        showToolbar("Edit Ticket",true);
+        showToolbar(TITLE_GET_EXTRA_TICKET,true);
         findViewsById();
         setListenerSpinnerTypeTicket();
         dateticket.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +178,7 @@ public class Edit_Ticket extends AppCompatActivity {
     private void SetValues()
     {
         bundle=getIntent().getExtras();
-        parameters =(Ticket)bundle.getSerializable("Mi Ticket");//TODO crear constante
+        parameters =(Ticket)bundle.getSerializable(KEY_GET_EXTRA_TICKET);
         amount.setText(String.valueOf(parameters.getAmount()));
         geolocation.setText(parameters.getGeolocation());
         observation.setText(parameters.getObservation());

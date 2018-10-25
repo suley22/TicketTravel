@@ -2,6 +2,7 @@ package com.tickettravel.grupo2.tickettravel.data;
 
 import android.util.Log;
 
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.data.services.TypeCurrencyService;
 import com.tickettravel.grupo2.tickettravel.model.TypeCurrency;
 
@@ -49,7 +50,7 @@ public class RestApiTypeCurrency {
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").//TODO mover a constante
+                baseUrl(Constants.WEB_API_URL).
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

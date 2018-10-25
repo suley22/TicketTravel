@@ -1,5 +1,6 @@
 package com.tickettravel.grupo2.tickettravel.data;
 
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.data.services.UserService;
 
 import retrofit2.Call;
@@ -26,7 +27,7 @@ public class RestApiUser {
 
     public String getUser(String name, String password)
     {
-        String nameUser=null;
+        String nameUser = null;
 
         try
         {
@@ -37,16 +38,15 @@ public class RestApiUser {
         }
         catch(Exception e)
         {
-            nameUser="0";
+            nameUser = "0";
         }
         return  nameUser;
-
     }
 
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").
+                baseUrl(Constants.WEB_API_URL).
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

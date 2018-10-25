@@ -241,7 +241,9 @@ public class NewTicket extends AppCompatActivity {
                 && geolocation.getText().toString() != null && itemSelectedCurrency != 0
                 && itemSelectedCurrencyDescription != null && observation.getText().toString() != null
                 && realPath != null)
-        {result = true;}
+        {
+            result = true;
+        }
         return result;
     }
 

@@ -5,10 +5,19 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 public class RealPathUtil {
+
+    /*public static String getRP()
+    {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+            return getRealPathFromURI_API11to18();
+        else
+            getRealPathFromURI_API19()
+    }*/
 
     @SuppressLint("NewApi")
     public static String getRealPathFromURI_API19(Context context, Uri uri){
