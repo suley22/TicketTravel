@@ -17,20 +17,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.airbnb.lottie.LottieAnimationView;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.android.MediaManager;
 import com.tickettravel.grupo2.tickettravel.R;
 import com.tickettravel.grupo2.tickettravel.adapter.TicketAdapter;
 import com.tickettravel.grupo2.tickettravel.auxiliar.CloudinarySingleton;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTicket;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class List_Tickets extends AppCompatActivity implements TicketAdapter.TicketAdapterListener {
+    //region properties
     private RecyclerView recyclerView;
     private TicketAdapter mAdapter;
     private FrameLayout frameLayout;
@@ -41,28 +39,43 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
     private int IdTravel;
     private ImageView imagenerror;
     private LoadPost loadPost;
+    //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list__tickets);
-        Toolbar toolbar =findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        loadToolbar();
+
         Bundle data=this.getIntent().getExtras();
-        IdTravel=data.getInt("id_travel");
+        IdTravel=data.getInt("id_travel"); //TODO crear constante
         CloudinarySingleton.getInstance(this);
+
+        findViewsById();
+        loadRecyclerView();
+        actionModeCallback = new ActionModeCallback();
+    }
+
+    private void findViewsById() {
         imagenerror=findViewById(R.id.imagenerror);
         recyclerView = findViewById(R.id.rv_home_ticket);
         frameLayout= findViewById(R.id.frameloading);
         textnull=findViewById(R.id.textnull);
         lottieAnimationView=findViewById(R.id.animationlottiemain);
         lottieAnimationView.playAnimation();
+    }
+
+    private void loadRecyclerView() {
         mAdapter = new TicketAdapter(this, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        actionModeCallback = new ActionModeCallback();
+    }
+
+    private void loadToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -129,10 +142,12 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
         protected void onPostExecute(String ticket) {
             // delete all the selected messages
             if(ticket==null)
-            {imagenerror.setVisibility(View.VISIBLE);
-            textnull.setVisibility(View.GONE);
-            lottieAnimationView.setVisibility(View.GONE);}
-            else if(ticket.equals("ok"))
+            {
+                imagenerror.setVisibility(View.VISIBLE);
+                textnull.setVisibility(View.GONE);
+                lottieAnimationView.setVisibility(View.GONE);
+            }
+            else if(ticket.equals("ok")) //TODO crear constante (cambiar por switch si se puede)
             {
                 recyclerView.setVisibility(View.VISIBLE);
                 frameLayout.setVisibility(View.GONE);
@@ -209,7 +224,6 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
                 @Override
                 public void run() {
                     mAdapter.resetAnimationIndex();
-                    // mAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -219,20 +233,18 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
     private ArrayList<Ticket> getTickets()
     {
         ArrayList<Ticket>tickets= new ArrayList<>();
-            List<Integer> selectedItemPositions =
-                    mAdapter.getSelectedItems();
-            for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
-                mAdapter.get(i).setIdTravel(IdTravel);
-                tickets.add(mAdapter.get(i));
-            }
+        List<Integer> selectedItemPositions = mAdapter.getSelectedItems();
+        for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
+            mAdapter.get(i).setIdTravel(IdTravel);
+            tickets.add(mAdapter.get(i));
+        }
         return tickets;
     }
 
     // deleting the tickets from recycler view
     private void deleteTickets() {
         mAdapter.resetAnimationIndex();
-        List<Integer> selectedItemPositions =
-                mAdapter.getSelectedItems();
+        List<Integer> selectedItemPositions = mAdapter.getSelectedItems();
         for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
             mAdapter.removeData(selectedItemPositions.get(i));
         }

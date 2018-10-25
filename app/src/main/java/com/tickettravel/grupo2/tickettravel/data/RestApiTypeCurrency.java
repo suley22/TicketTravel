@@ -2,6 +2,7 @@ package com.tickettravel.grupo2.tickettravel.data;
 
 import android.util.Log;
 
+import com.tickettravel.grupo2.tickettravel.data.services.TypeCurrencyService;
 import com.tickettravel.grupo2.tickettravel.model.TypeCurrency;
 
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class RestApiTypeCurrency {
         try
         {
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<ArrayList<TypeCurrency>> ticketsCall = apiService.getTypeCurrency();
+            TypeCurrencyService typeCurrencyService = retrofit.create(TypeCurrencyService.class);
+            Call<ArrayList<TypeCurrency>> ticketsCall = typeCurrencyService.getTypeCurrency();
             tickets = ticketsCall.execute().body();
         }
         catch(Exception e)
@@ -48,7 +49,7 @@ public class RestApiTypeCurrency {
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").
+                baseUrl("http://www.promon.net.ar/Test/").//TODO mover a constante
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

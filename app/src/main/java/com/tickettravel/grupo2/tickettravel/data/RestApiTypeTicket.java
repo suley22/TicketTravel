@@ -2,7 +2,7 @@ package com.tickettravel.grupo2.tickettravel.data;
 
 import android.util.Log;
 
-import com.tickettravel.grupo2.tickettravel.model.Ticket;
+import com.tickettravel.grupo2.tickettravel.data.services.TypeTicketService;
 import com.tickettravel.grupo2.tickettravel.model.TypeTicket;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class RestApiTypeTicket {
         try
         {
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<ArrayList<TypeTicket>> ticketsCall = apiService.getTypeTickets();
+            TypeTicketService typeTicketService = retrofit.create(TypeTicketService.class);
+            Call<ArrayList<TypeTicket>> ticketsCall = typeTicketService.getTypeTickets();
             tickets = ticketsCall.execute().body();
         }
         catch(Exception e)
@@ -49,7 +49,7 @@ public class RestApiTypeTicket {
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").
+                baseUrl("http://www.promon.net.ar/Test/").//TODO mover a constante
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

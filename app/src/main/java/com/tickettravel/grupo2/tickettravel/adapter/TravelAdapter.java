@@ -58,26 +58,21 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
     public void onBindViewHolder(@NonNull final TicketViewHolder holder, final int position)
     {
         Travel t = getItems().get(position);
-        holder.title.setText("Viaje N°: "+t.getIdTravel());
-        holder.itemorigin.setText(t.getOrigin());
-        holder.itemdestiny.setText(t.getDestiny());
-        holder.datestart2.setText(t.getDateStart().trim());
-        holder.dateend2.setText(t.getReturn().trim());
-        if(t.getStatus()==2)
-        {holder.status.setText("Closed");
-            holder.status.setTextColor(Color.parseColor("#BF123F"));
-        holder.action_add.setVisibility(View.GONE);}
-        else
-        {holder.action_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(activity,List_Tickets.class);
-                Bundle parametros= new Bundle();
-                parametros.putInt("id_travel",getItems().get(position).getIdTravel());
-                intent.putExtras(parametros);
-                activity.startActivity(intent);
-            }
-        });}
+        setTextViewHolder(holder,t);
+
+        //TODO poner switch para status y separar la logica a metodos con nombres descriptivos
+        int status = t.getStatus();
+        switch (status){
+            case 2:
+                holder.status.setText("Closed");
+                holder.status.setTextColor(Color.parseColor("#BF123F"));
+                holder.action_add.setVisibility(View.GONE);
+                break;
+            default:
+                setClickActionAddHolder(holder,position);
+                break;
+        }
+
         holder.action_see.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +83,27 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
                 activity.startActivity(intent);
             }
         });
+    }
+
+    private void setClickActionAddHolder(TicketViewHolder holder, final int position) {
+        holder.action_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(activity,List_Tickets.class);
+                Bundle parametros= new Bundle();
+                parametros.putInt("id_travel",getItems().get(position).getIdTravel());//TODO mover a constante
+                intent.putExtras(parametros);
+                activity.startActivity(intent);
+            }
+        });
+    }
+
+    private void setTextViewHolder(TicketViewHolder holder, Travel t) {
+        holder.title.setText("Viaje N°: "+t.getIdTravel());
+        holder.itemorigin.setText(t.getOrigin());
+        holder.itemdestiny.setText(t.getDestiny());
+        holder.datestart2.setText(t.getDateStart().trim());
+        holder.dateend2.setText(t.getReturn().trim());
     }
 
 }

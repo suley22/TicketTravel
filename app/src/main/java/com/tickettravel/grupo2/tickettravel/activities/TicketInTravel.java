@@ -19,23 +19,33 @@ import com.tickettravel.grupo2.tickettravel.model.Ticket;
 import java.util.List;
 
 public class TicketInTravel extends AppCompatActivity {
-private RecyclerView rvTicket;
-private RvAdapterTicketInTravel adapter;
-private FrameLayout frameLayout;
-private TextView textNull;
-private LottieAnimationView lottieAnimationView;
-private LoadTask threads;
-private Bundle data;
+    //region properties
+    private RecyclerView rvTicket;
+    private RvAdapterTicketInTravel adapter;
+    private FrameLayout frameLayout;
+    private TextView textNull;
+    private LottieAnimationView lottieAnimationView;
+    private LoadTask threads;
+    private Bundle data;
+    //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_in_travel);
-        frameLayout=findViewById(R.id.frameloading);
+        findViewsById();
         showToolbar("Tickets in Travel",true);
+        lottieAnimationView.playAnimation();
+        loadRecyclerView();
+    }
+
+    private void findViewsById() {
+        frameLayout=findViewById(R.id.frameloading);
         rvTicket = findViewById(R.id.rv_home_ticket);
         textNull=findViewById(R.id.textnull);
         lottieAnimationView=findViewById(R.id.animationlottiemain);
-        lottieAnimationView.playAnimation();
+    }
+
+    private void loadRecyclerView() {
         rvTicket.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RvAdapterTicketInTravel(this);
         rvTicket.setAdapter(adapter);
@@ -43,7 +53,7 @@ private Bundle data;
 
     public void showToolbar(String title, boolean upButton)
     {
-        Toolbar toolbar=findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
         toolbar.setTitleTextColor(0xFFFFFFFF);

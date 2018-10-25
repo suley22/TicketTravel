@@ -3,6 +3,7 @@ import android.util.Log;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.tickettravel.grupo2.tickettravel.data.services.TicketService;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class RestApiTicket
         try
         {
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<ArrayList<Ticket>> ticketsCall = apiService.getTicketbyTravel(IdViaje);
+            TicketService ticketService = retrofit.create(TicketService.class);
+            Call<ArrayList<Ticket>> ticketsCall = ticketService.getTicketbyTravel(IdViaje);
             tickets = ticketsCall.execute().body();
         }
         catch(Exception e)
@@ -63,13 +64,9 @@ public class RestApiTicket
                  tickets.get(i).setImageUrl(resul.get("url").toString());
             }
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<String> ticketsCall = apiService.postTickets(tickets);
+            TicketService ticketService = retrofit.create(TicketService.class);
+            Call<String> ticketsCall = ticketService.postTickets(tickets);
             result = ticketsCall.execute().body();
-           /* for (int i = 0; i <tickets.size() ; i++) {
-                Ticket ticket = Ticket.findById(Ticket.class, tickets.get(i).getId());
-                ticket.delete();
-            }*/
         }
         catch(Exception e)
         {
@@ -84,7 +81,7 @@ public class RestApiTicket
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").
+                baseUrl("http://www.promon.net.ar/Test/").//TODO mover a constante
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 public class NewTicket extends AppCompatActivity {
 
+    //region Properties
     private static final int PHOTO_SELECTED = 1;
     private Uri path;
     private String realPath;
@@ -53,33 +54,34 @@ public class NewTicket extends AppCompatActivity {
     private LottieAnimationView animationLottieMain;
     private LoadTaskTypeTicket loadTaskTypeTicket;
     private LoadTaskTypeCurrency loadTaskTypeCurrency;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new__ticket);
         showToolbar("New Ticket", true);
-
-        //References
-        scroll = findViewById(R.id.scroollprincipal);
-        Amount = findViewById(R.id.amountticket);
-        geolocation = findViewById(R.id.georeferenciaticket);
-        observation = findViewById(R.id.observation);
-        spinnerTypeCurrency = findViewById(R.id.spinnerTypeCurrency);
-        spinnerTypeTicket = findViewById(R.id.spinnerTypeTycket);
-        imageError = findViewById(R.id.imagenerror);
-        dateTicket = findViewById(R.id.dateticket);
-        imageButton = findViewById(R.id.imagebutton);
-        frameLayout = findViewById(R.id.frameloading);
-        animationLottieMain = findViewById(R.id.animationlottiemain);
-
-        //Events Clicks
+        findViewsById();
+        setSpinnerTypeCurrencyListener();
         dateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePicker();
             }
         });
+        setClickListenerImageButton();
+    }
+
+    private void setClickListenerImageButton() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClickButtonImage();
+            }
+        });
+    }
+
+    private void setSpinnerTypeCurrencyListener() {
         spinnerTypeCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -106,12 +108,20 @@ public class NewTicket extends AppCompatActivity {
 
             }
         });
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClickButtonImage();
-            }
-        });
+    }
+
+    private void findViewsById() {
+        scroll = findViewById(R.id.scroollprincipal);
+        Amount = findViewById(R.id.amountticket);
+        geolocation = findViewById(R.id.georeferenciaticket);
+        observation = findViewById(R.id.observation);
+        spinnerTypeCurrency = findViewById(R.id.spinnerTypeCurrency);
+        spinnerTypeTicket = findViewById(R.id.spinnerTypeTycket);
+        imageError = findViewById(R.id.imagenerror);
+        dateTicket = findViewById(R.id.dateticket);
+        imageButton = findViewById(R.id.imagebutton);
+        frameLayout = findViewById(R.id.frameloading);
+        animationLottieMain = findViewById(R.id.animationlottiemain);
     }
 
     private void ClickButtonImage() {
@@ -248,11 +258,14 @@ public class NewTicket extends AppCompatActivity {
     }
     @Override
     protected void onStop()
-    { super.onStop();
-        if(loadTaskTypeTicket != null && loadTaskTypeTicket.getStatus().equals(AsyncTask.Status.RUNNING))
+    {
+        super.onStop();
+
+        if(loadTaskTypeTicket == null)
+            return;
+
+        if( loadTaskTypeTicket.getStatus().equals(AsyncTask.Status.RUNNING))
             loadTaskTypeTicket.cancel(true);
-        if(loadTaskTypeCurrency != null && loadTaskTypeCurrency.getStatus().equals(AsyncTask.Status.RUNNING))
-            loadTaskTypeCurrency.cancel(true);
     }
 
 }

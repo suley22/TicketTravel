@@ -2,6 +2,7 @@ package com.tickettravel.grupo2.tickettravel.data;
 
 import android.util.Log;
 
+import com.tickettravel.grupo2.tickettravel.data.services.TravelService;
 import com.tickettravel.grupo2.tickettravel.model.Travel;
 
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class RestApiTravel {
         try
         {
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<ArrayList<Travel>> ticketsCall = apiService.getTravel();
+            TravelService travelService = retrofit.create(TravelService.class);
+            Call<ArrayList<Travel>> ticketsCall = travelService.getTravel();
             travels = ticketsCall.execute().body();
         }
         catch(Exception e)
@@ -48,7 +49,7 @@ public class RestApiTravel {
     private Retrofit buildRetrofit()
     {
         return new Retrofit.Builder().
-                baseUrl("http://www.promon.net.ar/Test/").
+                baseUrl("http://www.promon.net.ar/Test/").//TODO crear constante
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
     }

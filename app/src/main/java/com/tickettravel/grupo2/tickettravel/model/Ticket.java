@@ -1,6 +1,5 @@
 package com.tickettravel.grupo2.tickettravel.model;
 
-
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;

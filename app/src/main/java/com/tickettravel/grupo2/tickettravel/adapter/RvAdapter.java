@@ -14,17 +14,18 @@ import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
 public class RvAdapter extends ArrayRvAdapter<Ticket,RvAdapter.TicketViewHolder> implements View.OnClickListener
 {
-
     private View.OnClickListener listener;
     public static class TicketViewHolder extends RecyclerView.ViewHolder
     {
-        TextView tvType;
-        TextView tvNro;
-        TextView tvAmount;
-        TextView tvTicketDate;
-        LinearLayout linearColor;
-        TextView tvObservation;
+        //region properties
+        private TextView tvType;
+        private TextView tvNro;
+        private TextView tvAmount;
+        private TextView tvTicketDate;
+        private LinearLayout linearColor;
+        private TextView tvObservation;
         public RelativeLayout viewBackground, viewForeground;
+        //endregion
 
         public TicketViewHolder(View itemView)
         {
@@ -63,15 +64,30 @@ public class RvAdapter extends ArrayRvAdapter<Ticket,RvAdapter.TicketViewHolder>
     public void onBindViewHolder(@NonNull TicketViewHolder holder, final int position)
     {
         Ticket t = getItems().get(position);
+        setTextViewsBindViewHoder(holder,t);
+        setTicketColor(holder,t);
+    }
+
+    private void setTicketColor(TicketViewHolder holder,Ticket t) {
+        String typeTicketDescription = t.getTicketTypeDescription();
+        switch (typeTicketDescription){
+            case "Taxi": //TODO ver donde poner constantes
+                holder.linearColor.setBackgroundColor(Color.parseColor("#84DBFF"));//TODO mover a constantes
+                break;
+            case "Cafeteria":
+                holder.linearColor.setBackgroundColor(Color.parseColor("#D01F4D"));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setTextViewsBindViewHoder(TicketViewHolder holder,Ticket t) {
         holder.tvNro.setText("Ticket N°: "+t.getId());
         holder.tvType.setText(t.getTicketTypeDescription());
         holder.tvAmount.setText(String.valueOf(t.getAmount()));
         holder.tvTicketDate.setText(t.getDate());
         holder.tvObservation.setText(t.getObservation());
-        if(t.getTicketTypeDescription().equals("Taxi"))
-        {holder.linearColor.setBackgroundColor(Color.parseColor("#84DBFF"));}
-        else if(t.getTicketTypeDescription().equals("Cafeteria"))
-        {holder.linearColor.setBackgroundColor(Color.parseColor("#D01F4D"));}
     }
 
     public void restoreItem(Ticket item, int position) {

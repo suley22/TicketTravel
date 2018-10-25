@@ -1,11 +1,10 @@
-package com.tickettravel.grupo2.tickettravel.data;
+/*package com.tickettravel.grupo2.tickettravel.data;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 import com.tickettravel.grupo2.tickettravel.model.Travel;
 import com.tickettravel.grupo2.tickettravel.model.TypeCurrency;
 import com.tickettravel.grupo2.tickettravel.model.TypeTicket;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,3 +32,4 @@ public interface ApiService
     Call<String>postTickets(@Body ArrayList<Ticket> tickets);
 
 }
+*/

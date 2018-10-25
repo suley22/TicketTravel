@@ -58,9 +58,12 @@ public class Edit_Ticket extends AppCompatActivity {
         setContentView(R.layout.activity_edit__ticket);
         showToolbar("Edit Ticket",true);
         findViewsById();
-        setOnItemSelectedListener();
-        setOnClickListener();
-
+        setListenerSpinnerTypeTicket();
+        dateticket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {showDatePickerDialog();}
+        });
+        setOnClickListenerImageButton();
         new LoadTaskTypeTicket().execute();
         SetValues();
     }
@@ -69,21 +72,22 @@ public class Edit_Ticket extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-        if(resultCode == RESULT_OK)
-        {
-            path = data.getData();
-            imageButton.setImageURI(path);
-            realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+        switch(resultCode){
+            case RESULT_OK:
+                setImageUri(data);
+                break;
+            default:
+                break;
         }
     }
 
-    private void setOnClickListener() {
-        dateticket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {showDatePickerDialog();}
-        });
+    private void setImageUri(Intent data) {
+        path = data.getData();
+        imageButton.setImageURI(path);
+        realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+    }
 
+    private void setOnClickListenerImageButton() {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +98,7 @@ public class Edit_Ticket extends AppCompatActivity {
         });
     }
 
-    private void setOnItemSelectedListener() {
+    private void setListenerSpinnerTypeTicket() {
         spinnerTypeCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -172,7 +176,7 @@ public class Edit_Ticket extends AppCompatActivity {
     private void SetValues()
     {
         bundle=getIntent().getExtras();
-        parameters =(Ticket)bundle.getSerializable("Mi Ticket");
+        parameters =(Ticket)bundle.getSerializable("Mi Ticket");//TODO crear constante
         amount.setText(String.valueOf(parameters.getAmount()));
         geolocation.setText(parameters.getGeolocation());
         observation.setText(parameters.getObservation());
@@ -229,7 +233,9 @@ public class Edit_Ticket extends AppCompatActivity {
 
         if (validatorControl() == true) {
             try {
+
                 Ticket ticket = Ticket.findById(Ticket.class, parameters.getId());
+
                 ticket.setAmount(Float.parseFloat(amount.getText().toString()));
                 ticket.setTicketTypeId(itemSelectedType);
                 ticket.setTicketTypeDescription(itemSelectedTypeDescription);
@@ -240,6 +246,7 @@ public class Edit_Ticket extends AppCompatActivity {
                 ticket.setObservation(observation.getText().toString());
                 ticket.setImageUrl(realPath.toString());
                 ticket.save();
+
                 Toast.makeText(this, "Ticket Actualizado", Toast.LENGTH_SHORT).show();
                 finish();
             } catch (Exception e) {
@@ -252,9 +259,11 @@ public class Edit_Ticket extends AppCompatActivity {
     private boolean validatorControl()
     {
         boolean result=false;
-        if(!amount.getText().toString().matches("") && !observation.getText().toString().matches("") && !dateticket.getText().toString().matches("")
-                && !geolocation.getText().toString().matches(""))
-        {result=true;}
+        if(!amount.getText().toString().matches("") &&
+           !dateticket.getText().toString().matches(""))
+        {
+            result=true;
+        }
         return result;
     }
 }

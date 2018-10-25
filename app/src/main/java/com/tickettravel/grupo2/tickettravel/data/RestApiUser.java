@@ -1,14 +1,7 @@
 package com.tickettravel.grupo2.tickettravel.data;
 
-import android.util.Log;
+import com.tickettravel.grupo2.tickettravel.data.services.UserService;
 
-import com.tickettravel.grupo2.tickettravel.model.Ticket;
-import com.tickettravel.grupo2.tickettravel.model.User;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -38,8 +31,8 @@ public class RestApiUser {
         try
         {
             Retrofit retrofit = buildRetrofit();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<String> UserCall = apiService.getUser(name,password);
+            UserService userService = retrofit.create(UserService.class);
+            Call<String> UserCall = userService.getUser(name,password);
             nameUser=UserCall.execute().body();
         }
         catch(Exception e)

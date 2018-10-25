@@ -23,52 +23,74 @@ import com.tickettravel.grupo2.tickettravel.fragments.Ticket_fragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String NameUser;
-    FragmentManager fragmentManager;
-    Fragment fragment = null;
+    //region properties
+    private String NameUser;
+    private FragmentManager fragmentManager;
+    private Fragment fragment = null;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Bundle parametros;
+    private Toolbar toolbar;
+    private FloatingActionButton floatingBtn;
+    //endregion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bundle parametros = this.getIntent().getExtras();
-        NameUser= parametros.getString("name");
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        fragment = new Ticket_fragment();
-        fragmentManager= getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentarea,fragment).commit();
+        parametros = this.getIntent().getExtras();
+        NameUser= parametros.getString("name");//TODO crear constante
 
-        getSupportActionBar().setTitle("Ticket Travel");
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-       FloatingActionButton fab =findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        findViewsById();
+        initFragment();
+        setClickListenerFloatingButton();
+        loadActionBarToolbar();
+    }
+
+    private void setClickListenerFloatingButton() {
+        floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent newTicket = new Intent(getApplicationContext(),NewTicket.class);
                 startActivity(newTicket);
             }
         });
+    }
 
-        DrawerLayout drawer =findViewById(R.id.drawer_layout);
+    private void initFragment() {
+        fragment = new Ticket_fragment();
+        fragmentManager= getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragmentarea,fragment).commit();
+    }
+
+    private void findViewsById() {
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView =findViewById(R.id.nav_view);
+        floatingBtn =findViewById(R.id.fab);
+    }
+
+    private void loadActionBarToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.title_actionBar_mainActivity);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        drawer.setScrimColor(getResources().getColor(android.R.color.transparent));
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        drawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
         toggle.syncState();
 
-        NavigationView navigationView =findViewById(R.id.nav_view);
         View hview= navigationView.getHeaderView(0);
-        TextView nameuser= hview.findViewById(R.id.nameUserMenu);
-        nameuser.setText("Bienvenido "+NameUser);
+        TextView nameuser = hview.findViewById(R.id.nameUserMenu);
+        nameuser.setText("Bienvenido " + NameUser);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -80,12 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {
-          //  return true;
-       // }
-
         return super.onOptionsItemSelected(item);
     }
     @SuppressWarnings("StatementWithEmptyBody")
@@ -99,30 +115,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment= new Ticket_fragment();
 
         } else if (id == R.id.nav_render) {
-
            fragment= new Rendir_fragment();
-           // Intent intent =new Intent(this,List_Tickets.class);
-           // startActivity(intent);
         } else if (id == R.id.nav_logout) {
-            SharedPreferences preferences =getSharedPreferences("userSesion",0);
+            SharedPreferences preferences =getSharedPreferences("userSesion",0);//TODO crear constante
             preferences.edit().clear().commit();
-            this.startActivity (new Intent(getApplicationContext(), LoginActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            this.startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
-
         }
 
         if(fragment!=null)
         {
-
             fragmentManager= getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fragmentarea,fragment);
             ft.commit();
         }
 
-        DrawerLayout drawer =findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }

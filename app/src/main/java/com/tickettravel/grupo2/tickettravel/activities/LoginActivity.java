@@ -18,9 +18,12 @@ import com.tickettravel.grupo2.tickettravel.data.RestApiUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //region properties
     private EditText userText, passText;
     private Button buttonText;
     private LottieAnimationView lottieAnimationView;
+    //endregion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String name) {
-
         Intent toHome=new Intent(LoginActivity.this,MainActivity.class );
         Bundle parametros = new Bundle();
         parametros.putString("name",name);
@@ -54,9 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void SavePreference()
     {
-        SharedPreferences preferences= getSharedPreferences("userSesion",Context.MODE_PRIVATE);
+        SharedPreferences preferences= getSharedPreferences("userSesion",Context.MODE_PRIVATE);//TODO crear constante
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putString("user",userText.getText().toString());
+        editor.putString("user",userText.getText().toString());//TODO crear constante
         editor.commit();
     }
 

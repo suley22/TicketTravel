@@ -26,4 +26,5 @@
     <string name="addticket">Add Ticket</string>
     <string name="viewtravel">View Travel</string>
     <string name="Loading">Uploading Tickets, wait please...</string>
+    <string name="title_actionBar_mainActivity">Ticket Travel</string>
 </resources>

@@ -8,7 +8,7 @@
 
     <meta-data
         android:name="DATABASE"
-        android:value="TicketTravelDB.db" />
+        android:value="TicketTravelDB1.db" />
     <meta-data
         android:name="VERSION"
         android:value="2" />
@@ -17,7 +17,7 @@
         android:value="true" />
     <meta-data
         android:name="DOMAIN_PACKAGE_NAME"
-        android:value="com.tickettravel.grupo2.tickettravel" />
+        android:value="com.tickettravel.grupo2.tickettravel.model" />
 
     <application
         android:name="com.orm.SugarApp"
