@@ -92,7 +92,7 @@ public class RvAdapterTicketInTravel extends ArrayRvAdapter<Ticket,RvAdapterTick
     }
 
     private void setTextViewsBindViewHoder(TicketViewHolder holder, Ticket t) {
-        holder.tvNro.setText("Ticket N°: "+t.getId());
+        holder.tvNro.setText("Ticket N°: "+t.getTicketId());
         holder.tvType.setText(t.getTicketTypeDescription());
         holder.tvAmount.setText(String.valueOf(t.getAmount()));
         holder.tvTicketDate.setText(t.getDate());

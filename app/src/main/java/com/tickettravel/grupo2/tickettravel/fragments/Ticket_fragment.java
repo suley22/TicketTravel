@@ -21,6 +21,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.tickettravel.grupo2.tickettravel.R;
 import com.tickettravel.grupo2.tickettravel.activities.Edit_Ticket;
 import com.tickettravel.grupo2.tickettravel.adapter.RvAdapter;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.auxiliar.RecyclerItemTouchHelper;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
@@ -31,12 +32,14 @@ import java.util.ListIterator;
 
 public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+    //region Properties
     private RecyclerView rvTicket;
     private RvAdapter adapter;
     private FrameLayout frameLayout;
     private TextView textNull;
     private LottieAnimationView lottieAnimationView;
     private LoadTask threads;
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Edit_Ticket.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Mi Ticket", adapter.get(rvTicket.getChildAdapterPosition(v)));
+                bundle.putSerializable(Constants.TICKET, adapter.get(rvTicket.getChildAdapterPosition(v)));
                 intent.putExtras(bundle);
                 v.getContext().startActivity(intent);
             }
@@ -237,33 +240,34 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof RvAdapter.TicketViewHolder) {
-
-            final long name = adapter.get(viewHolder.getAdapterPosition()).getId();
-            final Ticket deletedItem = adapter.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
-            adapter.remove(viewHolder.getAdapterPosition());
-            //TODO llevar a metodo aparte
-            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinatormain), "Ticket N°" + name + " Borrado!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.restoreItem(deletedItem, deletedIndex);
-                }
-            }).setCallback(new Snackbar.Callback() {
-
-                @Override
-                public void onDismissed(Snackbar snackbar, int event) {
-                    if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                        Ticket ticket = Ticket.findById(Ticket.class, name);
-                        ticket.delete();
-                    }
-                }
-            });
-
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
+            Snackbar(viewHolder);
         }
     }
+
+    private void Snackbar(RecyclerView.ViewHolder viewHolder)
+    {  final long name = adapter.get(viewHolder.getAdapterPosition()).getId();
+        final Ticket deletedItem = adapter.get(viewHolder.getAdapterPosition());
+        final int deletedIndex = viewHolder.getAdapterPosition();
+        adapter.remove(viewHolder.getAdapterPosition());
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinatormain), "Ticket N°" + name + " Borrado!", Snackbar.LENGTH_LONG);
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.restoreItem(deletedItem, deletedIndex);
+            }
+        }).setCallback(new Snackbar.Callback() {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                    Ticket ticket = Ticket.findById(Ticket.class, name);
+                    ticket.delete();
+                }
+            }
+        });
+
+        snackbar.setActionTextColor(Color.YELLOW);
+        snackbar.show();}
 
     @Override
     public void onStart() {

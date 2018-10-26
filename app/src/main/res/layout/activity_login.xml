@@ -48,6 +48,9 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:hint="@string/user_text"
+                                            android:maxLines="1"
+                                            android:minLines="1"
+                                            android:singleLine="true"
                                             />
                                 </android.support.design.widget.TextInputLayout>
                                 <android.support.design.widget.TextInputLayout
@@ -61,6 +64,9 @@
                                             android:layout_height="wrap_content"
                                             android:hint="@string/pass_text"
                                             android:inputType="textPassword"
+                                            android:maxLines="1"
+                                            android:minLines="1"
+                                            android:singleLine="true"
                                             />
                                 </android.support.design.widget.TextInputLayout>
 
@@ -83,9 +89,6 @@
                                     app:lottie_autoPlay="true"
                                     app:lottie_fileName="material_loader.json"
                                     app:lottie_loop="true" />
-
-
-
                         </LinearLayout>
                 </ScrollView>
 

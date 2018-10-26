@@ -7,6 +7,7 @@ import com.orm.dsl.Table;
 public class Ticket extends SugarRecordModel {
     private static final long serialVersionUID = 5530255968065458983L;
 
+    private int TicketId;
     private @SerializedName("Amount")
     float Amount;
     private @SerializedName("Observation")
@@ -26,7 +27,6 @@ public class Ticket extends SugarRecordModel {
     int IdTravel;
 
     public Ticket(int amount, String observation, String ticketTypeName) {
-
         this.Amount = amount;
         this.Observation = observation;
         this.TicketTypeDescription = ticketTypeName;
@@ -45,6 +45,14 @@ public class Ticket extends SugarRecordModel {
         this.TypeCurrencyDescription = CurrencyDescription;
         this.Observation = observation;
         this.ImageUrl = imageUrl;
+    }
+
+    public int getTicketId() {
+        return TicketId;
+    }
+
+    public void setTicketId(int ticketId) {
+        TicketId = ticketId;
     }
 
     public int getIdTravel() {

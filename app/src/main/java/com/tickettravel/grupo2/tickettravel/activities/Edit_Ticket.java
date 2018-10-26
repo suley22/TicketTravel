@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +14,14 @@ import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
 import com.tickettravel.grupo2.tickettravel.auxiliar.RealPathUtil;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTypeCurrency;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTypeTicket;
@@ -44,14 +45,15 @@ public class Edit_Ticket extends AppCompatActivity {
     private Spinner spinnerTypeCurrency,spinnerTypeTicket;
     private static final int PHOTO_SELECTED = 1;
     private ImageButton imageButton;
-    private NestedScrollView scroll;
+    private ScrollView scroll;
     private FrameLayout frameLayout;
     private ImageView imagenError;
     private LottieAnimationView animationLottieMain;
     private Bundle bundle = null;
     private Ticket parameters;
-    private final String KEY_GET_EXTRA_TICKET = "Mi Ticket";
     private final String TITLE_GET_EXTRA_TICKET = "Edit Ticket";
+    private LoadTaskTypeCurrency loadTaskTypeCurrency;
+    private LoadTaskTypeTicket loadTaskTypeTicket;
     //endregion
 
     @Override
@@ -66,7 +68,6 @@ public class Edit_Ticket extends AppCompatActivity {
             public void onClick(View v) {showDatePickerDialog();}
         });
         setOnClickListenerImageButton();
-        new LoadTaskTypeTicket().execute();
         SetValues();
     }
 
@@ -131,18 +132,18 @@ public class Edit_Ticket extends AppCompatActivity {
 
     private void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR); // current year
-        int mMonth = c.get(Calendar.MONTH); // current month
-        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-        // date picker dialog
-        datePickerDialog = new DatePickerDialog(getApplicationContext(),new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year,int monthOfYear, int dayOfMonth) {
-                // set day of month , month and year value in the edit text
-                dateticket.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-            }
-        }, mYear, mMonth, mDay);
-
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        dateticket.setText(dayOfMonth + "/"
+                                + (monthOfYear + 1) + "/" + year);
+                    }
+                }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
 
@@ -178,7 +179,7 @@ public class Edit_Ticket extends AppCompatActivity {
     private void SetValues()
     {
         bundle=getIntent().getExtras();
-        parameters =(Ticket)bundle.getSerializable(KEY_GET_EXTRA_TICKET);
+        parameters =(Ticket)bundle.getSerializable(Constants.TICKET);
         amount.setText(String.valueOf(parameters.getAmount()));
         geolocation.setText(parameters.getGeolocation());
         observation.setText(parameters.getObservation());
@@ -202,8 +203,7 @@ public class Edit_Ticket extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<TypeTicket> ticket) {
             if(ticket!=null && ticket.size()>0)
-            { spinnerTypeTicket.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, ticket));
-            new LoadTaskTypeCurrency().execute();}
+            { spinnerTypeTicket.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, ticket));}
             else {
                 imagenError.setVisibility(View.VISIBLE);
                 animationLottieMain.setVisibility(View.GONE);}
@@ -267,5 +267,30 @@ public class Edit_Ticket extends AppCompatActivity {
             result=true;
         }
         return result;
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        //Threads
+        loadTaskTypeTicket =new LoadTaskTypeTicket();
+        loadTaskTypeTicket.execute();
+        loadTaskTypeCurrency = new LoadTaskTypeCurrency();
+        loadTaskTypeCurrency.execute();
+    }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+
+        if(loadTaskTypeTicket == null)
+            return;
+        if( loadTaskTypeTicket.getStatus().equals(AsyncTask.Status.RUNNING))
+            loadTaskTypeTicket.cancel(true);
+        if(loadTaskTypeCurrency == null)
+            return;
+        if( loadTaskTypeCurrency.getStatus().equals(AsyncTask.Status.RUNNING))
+            loadTaskTypeCurrency.cancel(true);
     }
 }

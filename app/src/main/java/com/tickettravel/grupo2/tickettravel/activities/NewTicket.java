@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,14 +17,13 @@ import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.cloudinary.android.MediaManager;
 import com.tickettravel.grupo2.tickettravel.R;
-import com.tickettravel.grupo2.tickettravel.auxiliar.CloudinarySingleton;
 import com.tickettravel.grupo2.tickettravel.auxiliar.RealPathUtil;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTypeCurrency;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTypeTicket;
@@ -48,7 +46,7 @@ public class NewTicket extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Spinner spinnerTypeCurrency, spinnerTypeTicket;
     private ImageButton imageButton;
-    private NestedScrollView scroll;
+    private ScrollView scroll;
     private FrameLayout frameLayout;
     private ImageView imageError;
     private LottieAnimationView animationLottieMain;
@@ -268,6 +266,10 @@ public class NewTicket extends AppCompatActivity {
 
         if( loadTaskTypeTicket.getStatus().equals(AsyncTask.Status.RUNNING))
             loadTaskTypeTicket.cancel(true);
-    }
+        if(loadTaskTypeCurrency == null)
+            return;
 
+        if( loadTaskTypeCurrency.getStatus().equals(AsyncTask.Status.RUNNING))
+            loadTaskTypeCurrency.cancel(true);
+    }
 }

@@ -10,4 +10,7 @@ public final class Constants {
     /*COLOR TYPE TICKET*/
     public static final String COLOR_TYPE_TICKET_TAXI = "#84DBFF";
     public static final String COLOR_TYPE_TICKET_CAFETERIA = "#D01F4D";
+
+    /*Bundle between Activities*/
+    public static final String TICKET = "Mi Ticket";
 }
