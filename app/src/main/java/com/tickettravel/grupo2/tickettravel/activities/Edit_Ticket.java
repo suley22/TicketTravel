@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,7 +53,7 @@ public class Edit_Ticket extends AppCompatActivity {
     private LottieAnimationView animationLottieMain;
     private Bundle bundle = null;
     private Ticket parameters;
-    private final String TITLE_GET_EXTRA_TICKET = "Edit Ticket";
+    private final String TITLE_GET_EXTRA_TICKET = "Editar Ticket";
     private LoadTaskTypeCurrency loadTaskTypeCurrency;
     private LoadTaskTypeTicket loadTaskTypeTicket;
     //endregion
@@ -71,6 +73,26 @@ public class Edit_Ticket extends AppCompatActivity {
         SetValues();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_done:
+                UpdateTicket();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -166,7 +188,6 @@ public class Edit_Ticket extends AppCompatActivity {
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,7 +252,7 @@ public class Edit_Ticket extends AppCompatActivity {
         }
     }
 
-    public void UpdateTicket(View v) {
+    public void UpdateTicket() {
 
         if (validatorControl() == true) {
             try {

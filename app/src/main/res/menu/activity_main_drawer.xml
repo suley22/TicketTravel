@@ -8,15 +8,15 @@
             android:id="@+id/nav_tickets"
             android:checked="true"
             android:icon="@drawable/ticketic"
-            android:title="My Tickets" />
+            android:title="Mis Tickets" />
         <item
             android:id="@+id/nav_render"
             android:icon="@drawable/renderico"
-            android:title="Rendition" />
+            android:title="Rendicion" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout"
-            android:title="Log Out" />
+            android:title="Cerrar Sesion" />
 
     </group>
 </menu>

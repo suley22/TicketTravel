@@ -7,9 +7,13 @@ public final class Constants {
     /*TYPE TICKET */
     public static final String TYPE_TICKET_TAXI = "Taxi";
     public static final String TYPE_TICKET_CAFETERIA= "Cafeteria";
+    public static final String TYPE_TICKET_COMIDA = "Comida";
+    public static final String TYPE_TICKET_VUELOS= "Vuelos";
     /*COLOR TYPE TICKET*/
     public static final String COLOR_TYPE_TICKET_TAXI = "#84DBFF";
     public static final String COLOR_TYPE_TICKET_CAFETERIA = "#D01F4D";
+    public static final String COLOR_TYPE_TICKET_COMIDA = "#72D860";
+    public static final String COLOR_TYPE_TICKET_VUELOS = "#C785F0";
 
     /*Bundle between Activities*/
     public static final String TICKET = "Mi Ticket";
