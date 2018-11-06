@@ -1,23 +1,25 @@
 package com.tickettravel.grupo2.tickettravel.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.KeyExtra;
 import com.tickettravel.grupo2.tickettravel.fragments.Rendir_fragment;
 import com.tickettravel.grupo2.tickettravel.fragments.Ticket_fragment;
 
@@ -32,9 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Bundle parametros;
     private Toolbar toolbar;
     private FloatingActionButton floatingBtn;
-
-    private final String KEY_GET_EXTRA_STRING = "name";
-    private final String KEY_USER_SESION = "userSesion";
     //endregion
 
     @Override
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         parametros = this.getIntent().getExtras();
-        NameUser = parametros.getString(KEY_GET_EXTRA_STRING);
+        NameUser = parametros.getString(KeyExtra.KEY_EXTRA_USER_NAME);
 
         findViewsById();
         initFragment();
@@ -51,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setClickListenerFloatingButton() {
+        if(floatingBtn == null) return;
+
         floatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initFragment() {
         fragment = new Ticket_fragment();
-        fragmentManager= getFragmentManager();
+        fragmentManager= getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentarea,fragment).commit();
     }
 
@@ -75,16 +76,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void loadActionBarToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_actionBar_mainActivity);
+        getSupportActionBar().setTitle(getResources().getString(R.string.title_actionBar_mainActivity));
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         drawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
         toggle.syncState();
 
-        View hview= navigationView.getHeaderView(0);
+        View hview = navigationView.getHeaderView(0);
         TextView nameuser = hview.findViewById(R.id.nameUserMenu);
-        nameuser.setText("Bienvenido " + NameUser);
+        nameuser.setText(getResources().getString(R.string.title_name_user_nav_bar) + NameUser);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -107,26 +110,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_tickets) {
-            fragment= new Ticket_fragment();
-
-        } else if (id == R.id.nav_render) {
-           fragment= new Rendir_fragment();
-        } else if (id == R.id.nav_logout) {
-            SharedPreferences preferences = getSharedPreferences(KEY_USER_SESION,0);
-            preferences.edit().clear().commit();
-            this.startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            finish();
+        switch(id){
+            case R.id.nav_tickets:
+                fragment= new Ticket_fragment();
+                break;
+            case R.id.nav_render:
+                fragment= new Rendir_fragment();
+                break;
+            case R.id.nav_logout:
+                LogoutConfirm();
+                break;
         }
 
         if(fragment!=null)
         {
-            fragmentManager= getFragmentManager();
+            fragmentManager= getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fragmentarea,fragment);
             ft.commit();
@@ -134,5 +137,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void LogoutConfirm() {
+        SharedPreferences preferences = getSharedPreferences(KeyExtra.KEY_USER_SESION,0);
+        preferences.edit().clear().apply();
+        this.startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+        finish();
     }
 }

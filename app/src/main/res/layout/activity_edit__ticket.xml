@@ -11,8 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:elevation="4dp"/>
     <ScrollView
         android:id="@+id/scroollprincipal"
@@ -33,7 +31,7 @@
                     android:id="@+id/amountticket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Monto"
+                    android:hint="Amount"
                     android:inputType="number"
                     android:textColor="@color/colorTextBlack"/>
             </android.support.design.widget.TextInputLayout>
@@ -53,7 +51,7 @@
                     android:id="@+id/dateticket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Fecha"
+                    android:hint="Date"
                     android:textColor="@color/colorTextBlack"
                     android:focusable="false" />
             </android.support.design.widget.TextInputLayout>
@@ -66,7 +64,7 @@
                     android:id="@+id/georeferenciaticket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Geolocalizacion"
+                    android:hint="Geolocation"
                     android:textColor="@color/colorTextBlack"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -90,7 +88,7 @@
                     android:id="@+id/observation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Observacion"
+                    android:hint="Observation"
                     android:textColor="@color/colorTextBlack"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -99,11 +97,21 @@
                 android:layout_margin="5dp"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginBottom="50dp"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/imagentouch"
                 />
+            <Button
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="30dp"
+                android:id="@+id/login_buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Ticket"
+                android:onClick="UpdateTicket"
+                android:theme="@style/RaisedButton" />
+
         </LinearLayout>
     </ScrollView>
     <FrameLayout

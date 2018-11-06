@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.tickettravel.grupo2.tickettravel.R;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
+import com.tickettravel.grupo2.tickettravel.auxiliar.KeyExtra;
 import com.tickettravel.grupo2.tickettravel.data.RestApiUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -22,10 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userText, passText;
     private Button buttonText;
     private LottieAnimationView lottieAnimationView;
-    private final String KEY_PUT_EXTRA_USER = "user";
-    private final String KEY_USER_SESION = "userSesion";
-    private final String KEY_NAME_PUT_BUNDLE = "name";
-    private final String KEY_RESULT_OK_POST_EXECUTE_ASYNC_TASK = "1";
     //endregion
 
     @Override
@@ -52,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String name) {
         Intent toHome=new Intent(LoginActivity.this,MainActivity.class );
         Bundle parametros = new Bundle();
-        parametros.putString(KEY_NAME_PUT_BUNDLE,name);
+        parametros.putString(KeyExtra.KEY_EXTRA_USER_NAME,name);
         toHome.putExtras(parametros);
         startActivity(toHome);
         finish();
@@ -60,10 +58,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void SavePreference()
     {
-        SharedPreferences preferences= getSharedPreferences(KEY_USER_SESION,Context.MODE_PRIVATE);
+        SharedPreferences preferences= getSharedPreferences(KeyExtra.KEY_USER_SESION,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
-        editor.putString(KEY_PUT_EXTRA_USER,userText.getText().toString());
-        editor.commit();
+        editor.putString(KeyExtra.KEY_EXTRA_USER,userText.getText().toString());
+        editor.apply();
     }
 
     private void validate() {
@@ -71,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private class LoadTask extends AsyncTask<String, Void, String>
     {
-        public LoadTask() {
+        private LoadTask() {
         }
 
         protected void onPreExecute() {
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
            }
 
            switch (user){
-               case KEY_RESULT_OK_POST_EXECUTE_ASYNC_TASK:
+               case Constants.POST_EXECUTE_OK:
                    SavePreference();
                    login(userText.getText().toString());
                    break;

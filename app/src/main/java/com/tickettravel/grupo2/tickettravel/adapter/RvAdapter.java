@@ -78,12 +78,6 @@ public class RvAdapter extends ArrayRvAdapter<Ticket,RvAdapter.TicketViewHolder>
             case Constants.TYPE_TICKET_CAFETERIA:
                 holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_CAFETERIA));
                 break;
-            case Constants.TYPE_TICKET_COMIDA:
-                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_COMIDA));
-                break;
-            case Constants.TYPE_TICKET_VUELOS:
-                holder.linearColor.setBackgroundColor(Color.parseColor(Constants.COLOR_TYPE_TICKET_VUELOS));
-                break;
             default:
                 break;
         }

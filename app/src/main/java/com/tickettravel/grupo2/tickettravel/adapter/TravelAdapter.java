@@ -1,10 +1,7 @@
 package com.tickettravel.grupo2.tickettravel.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -14,26 +11,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.tickettravel.grupo2.tickettravel.R;
-import com.tickettravel.grupo2.tickettravel.activities.List_Tickets;
-import com.tickettravel.grupo2.tickettravel.activities.TicketInTravel;
 import com.tickettravel.grupo2.tickettravel.model.Travel;
 
 
 public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketViewHolder>
 {
+    //region properties
+    private Context context;
+    private View.OnClickListener listener;
+    private RvAdapterListener rvAdapterListener;
+    //endregion
 
-    private Activity activity;
-    private final String keyExtraIdTravel = "id_travel";
-
-    public static class TicketViewHolder extends RecyclerView.ViewHolder
+    public static class TicketViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener
     {
-        private TextView title, itemorigin,itemdestiny,datestart2,dateend2, status;
+        //region properties
+        private TextView title, itemorigin, itemdestiny, datestart2, dateend2, status;
         private Button action_add, action_see;
+        private RvAdapterListener rvAdapterListener;
+        //endregion
 
-        public TicketViewHolder(View itemView)
+        private TicketViewHolder(View itemView, RvAdapterListener rvAdapterListener)
         {
             super(itemView);
+
+            this.rvAdapterListener = rvAdapterListener;
+            //region findViewById
             title= itemView.findViewById(R.id.title);
             itemorigin = itemView.findViewById(R.id.itemorigin);
             itemdestiny = itemView.findViewById(R.id.itemdestiny);
@@ -42,18 +46,29 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
             status = itemView.findViewById(R.id.idstatus);
             action_add = itemView.findViewById(R.id.action_add);
             action_see = itemView.findViewById(R.id.action_see);
+            //endregion
+           action_add.setOnClickListener(this);
+           action_see.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view)
+        {
+            rvAdapterListener.onItemClick(view, getLayoutPosition());
         }
     }
 
-    public TravelAdapter(Activity activity){
-        this.activity=activity;
+    public TravelAdapter(Context context, RvAdapterListener rvAdapterListener){
+        this.context=context;
+        this.rvAdapterListener = rvAdapterListener;
     }
     @NonNull
     @Override
     public TicketViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_travel_list, parent, false);
-        return new TicketViewHolder(v);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View itemView = inflater.inflate(R.layout.item_travel_list, parent, false);
+        return new TicketViewHolder(itemView,rvAdapterListener);
     }
 
     @Override
@@ -65,42 +80,19 @@ public class TravelAdapter extends ArrayRvAdapter<Travel,TravelAdapter.TicketVie
         int status = t.getStatus();
         switch (status){
             case 2:
-                holder.status.setText(R.string.status_travel_closed);
-                holder.status.setTextColor(ContextCompat.getColor(activity,R.color.status_color_travel_closed));
+                String stateClosedString = context.getResources().getString(R.string.status_travel_closed);
+                holder.status.setText(stateClosedString);
+                holder.status.setTextColor(ContextCompat.getColor(context,R.color.status_color_travel_closed));
                 holder.action_add.setVisibility(View.GONE);
                 break;
             default:
-                setClickActionAddHolder(holder,position);
                 break;
         }
-
-        holder.action_see.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(activity,TicketInTravel.class);
-                Bundle parametros= new Bundle();
-                parametros.putInt(keyExtraIdTravel,getItems().get(position).getIdTravel());
-                intent.putExtras(parametros);
-                activity.startActivity(intent);
-            }
-        });
-    }
-
-    private void setClickActionAddHolder(TicketViewHolder holder, final int position) {
-        holder.action_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(activity,List_Tickets.class);
-                Bundle parametros = new Bundle();
-                parametros.putInt(keyExtraIdTravel,getItems().get(position).getIdTravel());
-                intent.putExtras(parametros);
-                activity.startActivity(intent);
-            }
-        });
     }
 
     private void setTextViewHolder(TicketViewHolder holder, Travel t) {
-        holder.title.setText("Viaje N°: "+t.getIdTravel());
+        String title = context.getResources().getString(R.string.title_travel_item_rendir_fragment);
+        holder.title.setText(title + t.getIdTravel());
         holder.itemorigin.setText(t.getOrigin());
         holder.itemdestiny.setText(t.getDestiny());
         holder.datestart2.setText(t.getDateStart().trim());

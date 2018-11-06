@@ -21,6 +21,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.tickettravel.grupo2.tickettravel.R;
 import com.tickettravel.grupo2.tickettravel.adapter.TicketAdapter;
 import com.tickettravel.grupo2.tickettravel.auxiliar.CloudinarySingleton;
+import com.tickettravel.grupo2.tickettravel.auxiliar.Constants;
+import com.tickettravel.grupo2.tickettravel.auxiliar.KeyExtra;
 import com.tickettravel.grupo2.tickettravel.data.RestApiTicket;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 
@@ -39,9 +41,6 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
     private int IdTravel;
     private ImageView imagenerror;
     private LoadPost loadPost;
-    private final String KEY_EXTRA_ID_TRAVEL = "id_travel";
-    private final String POST_EXECUTE_OK = "ok";
-    private final String POST_EXECUTE_FAIL = "fail";
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
         loadToolbar();
 
         Bundle data=this.getIntent().getExtras();
-        IdTravel = data.getInt(KEY_EXTRA_ID_TRAVEL);
+        IdTravel = data.getInt(KeyExtra.KEY_EXTRA_ID_TRAVEL);
         CloudinarySingleton.getInstance(this);
 
         findViewsById();
@@ -96,7 +95,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
 
     private class LoadTask extends AsyncTask<Void, Integer, List<Ticket>>
     {
-        public LoadTask() {
+        private LoadTask() {
         }
 
         @Override
@@ -106,8 +105,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
 
         @Override
         protected List<Ticket> doInBackground(Void... voids) {
-            List<Ticket> ticket = Ticket.listAll(Ticket.class);
-            return ticket;
+            return Ticket.listAll(Ticket.class);
         }
 
         @Override
@@ -130,7 +128,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
 
     private class LoadPost extends AsyncTask<ArrayList<Ticket>, Integer,String>
     {
-        public LoadPost() {
+        private LoadPost() {
         }
 
         @Override
@@ -156,6 +154,7 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
         }
         @Override
         protected void onPostExecute(String ticket) {
+
             // delete all the selected messages
             if(ticket==null)
             {
@@ -170,9 +169,9 @@ public class List_Tickets extends AppCompatActivity implements TicketAdapter.Tic
             lottieAnimationView.cancelAnimation();
 
             switch(ticket){
-                case POST_EXECUTE_OK:
+                case Constants.POST_EXECUTE_OK:
                     break;
-                case POST_EXECUTE_FAIL:
+                case Constants.POST_EXECUTE_FAIL:
                     Toast.makeText(getApplicationContext(),"Error de conexion, intente mas tarde por favor", Toast.LENGTH_LONG).show();
                     break;
                 default:

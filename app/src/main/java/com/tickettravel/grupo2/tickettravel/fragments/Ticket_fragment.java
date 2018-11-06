@@ -1,12 +1,12 @@
 package com.tickettravel.grupo2.tickettravel.fragments;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -42,7 +43,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
     //endregion
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_ticket_fragment, container, false);
 
         findViewsById(v);
@@ -82,7 +83,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
     }
 
     private class LoadTask extends AsyncTask<Void, Integer, List<Ticket>> {
-        public LoadTask() {
+        private LoadTask() {
         }
 
         @Override
@@ -92,135 +93,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
 
         @Override
         protected List<Ticket> doInBackground(Void... voids) {
-            try {
-                List<Ticket> ticket = Ticket.listAll(Ticket.class);
-                return ticket;
-            }catch(Exception e)
-            {
-
-            }
-            return new List<Ticket>() {
-                @Override
-                public int size() {
-                    return 0;
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    return false;
-                }
-
-                @Override
-                public boolean contains(Object o) {
-                    return false;
-                }
-
-                @NonNull
-                @Override
-                public Iterator<Ticket> iterator() {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public Object[] toArray() {
-                    return new Object[0];
-                }
-
-                @NonNull
-                @Override
-                public <T> T[] toArray(@NonNull T[] a) {
-                    return null;
-                }
-
-                @Override
-                public boolean add(Ticket ticket) {
-                    return false;
-                }
-
-                @Override
-                public boolean remove(Object o) {
-                    return false;
-                }
-
-                @Override
-                public boolean containsAll(@NonNull Collection<?> c) {
-                    return false;
-                }
-
-                @Override
-                public boolean addAll(@NonNull Collection<? extends Ticket> c) {
-                    return false;
-                }
-
-                @Override
-                public boolean addAll(int index, @NonNull Collection<? extends Ticket> c) {
-                    return false;
-                }
-
-                @Override
-                public boolean removeAll(@NonNull Collection<?> c) {
-                    return false;
-                }
-
-                @Override
-                public boolean retainAll(@NonNull Collection<?> c) {
-                    return false;
-                }
-
-                @Override
-                public void clear() {
-
-                }
-
-                @Override
-                public Ticket get(int index) {
-                    return null;
-                }
-
-                @Override
-                public Ticket set(int index, Ticket element) {
-                    return null;
-                }
-
-                @Override
-                public void add(int index, Ticket element) {
-
-                }
-
-                @Override
-                public Ticket remove(int index) {
-                    return null;
-                }
-
-                @Override
-                public int indexOf(Object o) {
-                    return 0;
-                }
-
-                @Override
-                public int lastIndexOf(Object o) {
-                    return 0;
-                }
-
-                @NonNull
-                @Override
-                public ListIterator<Ticket> listIterator() {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public ListIterator<Ticket> listIterator(int index) {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public List<Ticket> subList(int fromIndex, int toIndex) {
-                    return null;
-                }
-            };
+                return Ticket.listAll(Ticket.class);
         }
 
         @Override
@@ -250,7 +123,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
         final int deletedIndex = viewHolder.getAdapterPosition();
         adapter.remove(viewHolder.getAdapterPosition());
         Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinatormain), "Ticket N°" + name + " Borrado!", Snackbar.LENGTH_LONG);
-        snackbar.setAction("Deshacer", new View.OnClickListener() {
+        snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter.restoreItem(deletedItem, deletedIndex);
