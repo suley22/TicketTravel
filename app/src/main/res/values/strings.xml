@@ -41,4 +41,9 @@
     <string name="toast_text_updated_error_edit_ticket">Ocurrio Problema al Actualizar Ticket</string>
     <string name="toast_text_updated_error_field_validation_edit_ticket">Complete el ticket con todos los campos y foto de ticket</string>
 
+    <string name="dialog_logout_title">Cerrar Sesión</string>
+    <string name="dialog_logout_message">¿Estas seguro que deseas cerrar sesión?</string>
+    <string name="dialog_logout_text_btn_ok">Si</string>
+    <string name="dialog_logout_text_btn_cancel">No</string>
+
 </resources>

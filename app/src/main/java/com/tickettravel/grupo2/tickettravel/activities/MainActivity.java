@@ -1,5 +1,6 @@
 package com.tickettravel.grupo2.tickettravel.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -140,9 +142,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void LogoutConfirm() {
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle(getResources().getString(R.string.dialog_logout_title))
+            .setMessage(getResources().getString(R.string.dialog_logout_message))
+            .setPositiveButton(getResources().getString(R.string.dialog_logout_text_btn_ok), new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Logout();
+                }
+            })
+            .setNegativeButton(getResources().getString(R.string.dialog_logout_text_btn_cancel), null)
+            .show();
+    }
+
+    public void Logout(){
         SharedPreferences preferences = getSharedPreferences(KeyExtra.KEY_USER_SESION,0);
         preferences.edit().clear().apply();
-        this.startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+        startActivity (new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
         finish();
     }
 }
