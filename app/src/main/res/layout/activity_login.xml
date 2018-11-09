@@ -29,6 +29,8 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:theme="@style/EditText">
 
             <android.support.design.widget.TextInputEditText
@@ -45,6 +47,8 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:theme="@style/EditText">
 
             <android.support.design.widget.TextInputEditText
@@ -63,6 +67,9 @@
             android:id="@+id/login_buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/gradient"
             android:text="@string/button_login_text"
