@@ -53,7 +53,7 @@ public class Edit_Ticket extends AppCompatActivity {
     private LottieAnimationView animationLottieMain;
     private Bundle bundle = null;
     private Ticket parameters;
-
+    private final String TITLE_GET_EXTRA_TICKET = "Editar Ticket";
     private LoadTaskTypeCurrency loadTaskTypeCurrency;
     private LoadTaskTypeTicket loadTaskTypeTicket;
     //endregion
@@ -62,7 +62,7 @@ public class Edit_Ticket extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__ticket);
-        showToolbar(KeyExtra.KEY_EXTRA_ID_TRAVEL,true);
+        showToolbar(TITLE_GET_EXTRA_TICKET,true);
         findViewsById();
         setListenerSpinnerTypeTicket();
         dateticket.setOnClickListener(new View.OnClickListener() {

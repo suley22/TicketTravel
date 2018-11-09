@@ -56,7 +56,6 @@ public class TicketInTravel extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
