@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadActionBarToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.title_actionBar_mainActivity));
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);

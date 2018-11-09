@@ -29,7 +29,8 @@ import com.tickettravel.grupo2.tickettravel.data.RestApiTypeTicket;
 import com.tickettravel.grupo2.tickettravel.model.Ticket;
 import com.tickettravel.grupo2.tickettravel.model.TypeCurrency;
 import com.tickettravel.grupo2.tickettravel.model.TypeTicket;
-
+import android.view.Menu;
+import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -72,6 +73,26 @@ public class Edit_Ticket extends AppCompatActivity {
         SetValues();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_done:
+                UpdateTicket();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -167,7 +188,6 @@ public class Edit_Ticket extends AppCompatActivity {
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,7 +252,7 @@ public class Edit_Ticket extends AppCompatActivity {
         }
     }
 
-    public void UpdateTicket(View v) {
+    public void UpdateTicket() {
 
         if (validatorControl()) {
             try {

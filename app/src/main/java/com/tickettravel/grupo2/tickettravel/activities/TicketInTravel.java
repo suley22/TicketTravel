@@ -33,7 +33,7 @@ public class TicketInTravel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_in_travel);
         findViewsById();
-        showToolbar("Tickets in Travel",true);
+        showToolbar("Tickets en Viajes",true);
         lottieAnimationView.playAnimation();
         loadRecyclerView();
     }

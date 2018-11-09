@@ -123,7 +123,7 @@ public class Ticket_fragment extends Fragment implements RecyclerItemTouchHelper
         final int deletedIndex = viewHolder.getAdapterPosition();
         adapter.remove(viewHolder.getAdapterPosition());
         Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinatormain), "Ticket N°" + name + " Borrado!", Snackbar.LENGTH_LONG);
-        snackbar.setAction("UNDO", new View.OnClickListener() {
+        snackbar.setAction("Deshacer", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter.restoreItem(deletedItem, deletedIndex);
